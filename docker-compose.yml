@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  grpcservice2:
+    image: ${DOCKER_REGISTRY-}grpcservice2
+    build:
+      context: .
+      dockerfile: GrpcService1/Dockerfile
+    networks: 
+      - nats-poc
+    ports:
+      - "2345:80"
+
+  nats:
+    image: nats:2.5.0
+    ports:
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+    command:
+      - "-DV"
+    networks:
+      - nats-poc
+    restart: always
+
+networks:
+  nats-poc:
+    driver: bridge
+    name: nats-poc
